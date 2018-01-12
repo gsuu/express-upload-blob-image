@@ -5,19 +5,9 @@
   </head>
   <body>
       <h1>Upload an image</h1>
-      <form action="/uploads" method="POST" enctype="multipart/form-data">
-        <h2>Select an image to upload:</h2>
-        <br/>
-        <input type="file" name="fileName">
-        <br/>
-        <br/>
-        or
-
-        <input type="text" name="imageUrl" placeholder="image url">
-        <br/>
-        <br/>
-        <input type="submit" value="Upload Image">
-        <h1 id='uploadProgress'></h1>
+      <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="imageupload">
+        <input type="submit" name="uploadimage" value="Upload Image">
       </form>
   </body>
 </html>
