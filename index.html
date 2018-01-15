@@ -5,9 +5,80 @@
   </head>
   <body>
       <h1>Upload an image</h1>
-      <form action="/" method="POST" enctype="multipart/form-data">
-        <input type="file" name="imageupload">
-        <input type="submit" name="uploadimage" value="Upload Image">
+      <form action="/imgUpload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="images[]" id="upload-input" multiple="multiple">
+        <!-- <input type="submit" name="uploadimage" value="Upload Image"> -->
+        <button type="button" id="upload">Submit</button>
       </form>
+
+      <canvas id="canvas"></canvas>
+      <button type="button" id="edit-canvas">수정</button>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+
+  function getImageURL(file) {
+    var url;
+    if (typeof createObjectURL === "function") {
+      url = createObjectURL(file);
+    }
+    return url;
+  }
+
+  $('#upload').on('click', function() {
+    var files = $('#upload-input').get(0).files;
+
+    if (files.length > 0) {
+      var formData = new FormData();
+      for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        formData.append("images[]", file, file.name);
+      }
+
+      $.ajax({
+        url: "/imgUpload",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+          // console.log(data);
+          var img = new Image();
+          img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // 이미지 삽입
+            ctx.clearRect (0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+          };
+          img.src = data.url;
+        },
+        error: function(req, status, err) {
+          // console.log("code:"+req.status+"\n"+"message:"+req.responseText+"\n"+"error:"+err);
+        }
+      });
+    }
+  });
+
+  $('#edit-canvas').click(function() {
+    ctx.strokeRect(5,5,100,150);
+
+    canvas.toBlob(function(blob) {
+      var blobFormData = new FormData();
+      blobFormData.append('blob', new Blob([blob], {"type": "image/png"}) );
+
+      $.ajax({
+        url: "/blobUpload",
+        type: "POST",
+        data: blobFormData,
+        processData: false,
+        contentType: false
+      });
+    });
+  });
+
+</script>
   </body>
 </html>

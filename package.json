@@ -12,6 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
-    "multer": "^1.1.0"
+    "formidable": "^1.1.1",
+    "fs": "0.0.1-security",
+    "path": "^0.12.7",
+    "url": "^0.11.0"
   }
 }

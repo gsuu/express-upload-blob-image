@@ -1,31 +1,62 @@
-var express = require('express');
-var multer = require('multer');
-
-var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function(req, file, cb) {
-    cb( null, Date.now() + '-' + file.originalname);
-  }
-});
-
-var upload = multer({storage: storage});
-
+var express = require("express");
+var path = require('path');
+var formidable = require("formidable");
+var fs = require("fs");
+var url = require("url");
 var app = express();
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+function fullUrl(req) {
+  var url2 = url.format({
+    protocol: req.protocol,
+    host: req.get('host')
+    //pathname: req.originalUrl
+  });
+ return url2 + '/files/'
+}
+app.use('/', express.static(__dirname + '/'));
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
-// It's very crucial that the file name matches the name attribute in your html
-app.post('/', upload.single('imageupload'),function(req, res){
-  var files = req.file;
-  res.end(
-    `<p>${JSON.stringify(files)}</p>
-    <a href="/">Go Back</a>
-    `
-  );
+app.post("/imgUpload", function(req, res) {
+  var form = new formidable.IncomingForm();
+  var result;
+
+  form.multiples = true;
+
+  form.uploadDir = path.join(__dirname, "files");
+
+  form.on("file", function(field, file) {
+    // res.json(file);
+    fs.rename(file.path, path.join(form.uploadDir, file.name));
+    result = {
+      filename: file.name,
+      url: fullUrl(req) + file.name
+    };
+  });
+
+  form.on("error", function(err) {
+    console.log("An error has occured: \n" + err);
+  });
+
+  form.on("end", function() {
+    res.json(result);
+  });
+
+  form.parse(req);
+});
+
+app.post("/blobUpload", function(req, res) {
+  var form = new formidable.IncomingForm();
+  form.uploadDir = path.join(__dirname, "blobFiles");
+  form.keepExtensions = true;
+
+  form.on("error", function(err) {
+    console.log("An error has occured: \n" + err);
+  });
+
+  form.parse(req);
 });
 
 app.listen(5000);
