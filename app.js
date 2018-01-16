@@ -7,12 +7,12 @@ var cors = require('cors');
 var app = express();
 
 function fullUrl(req) {
-  var url2 = url.format({
+  var hostUrl = url.format({
     protocol: req.protocol,
     host: req.get('host')
     //pathname: req.originalUrl
   });
- return url2 + '/uploads/'
+  return hostUrl + '/uploads/';
 }
 app.use('/', express.static(__dirname + '/'));
 app.use(cors());

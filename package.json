@@ -1,13 +1,10 @@
 {
-  "name": "multer-test",
+  "name": "upload blob image",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "repository": {
-    "git": "https://github.com/stahlmanDesign/node-express-multer-image-upload"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "license": "ISC",
   "dependencies": {

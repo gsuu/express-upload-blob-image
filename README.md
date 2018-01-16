@@ -3,7 +3,7 @@
 ## Start
 Type these commands in the terminal inside the folder where you cloned the repository
 - `npm install` to install node modules
-- `node app.js` start sever
+- `npm start` start sever
 - `open http://localhost:5000/`
 
 ## How to Use
