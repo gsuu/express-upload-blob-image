@@ -11,7 +11,7 @@ function fullUrl(req) {
     host: req.get('host')
     //pathname: req.originalUrl
   });
- return url2 + '/files/'
+ return url2 + '/uploads/'
 }
 app.use('/', express.static(__dirname + '/'));
 
@@ -19,16 +19,14 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.post("/imgUpload", function(req, res) {
+app.post("/imageUpload", function(req, res) {
   var form = new formidable.IncomingForm();
   var result;
 
   form.multiples = true;
-
-  form.uploadDir = path.join(__dirname, "files");
+  form.uploadDir = path.join(__dirname, "/uploads");
 
   form.on("file", function(field, file) {
-    // res.json(file);
     fs.rename(file.path, path.join(form.uploadDir, file.name));
     result = {
       filename: file.name,
@@ -42,18 +40,6 @@ app.post("/imgUpload", function(req, res) {
 
   form.on("end", function() {
     res.json(result);
-  });
-
-  form.parse(req);
-});
-
-app.post("/blobUpload", function(req, res) {
-  var form = new formidable.IncomingForm();
-  form.uploadDir = path.join(__dirname, "blobFiles");
-  form.keepExtensions = true;
-
-  form.on("error", function(err) {
-    console.log("An error has occured: \n" + err);
   });
 
   form.parse(req);
