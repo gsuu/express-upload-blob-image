@@ -3,6 +3,7 @@ var path = require('path');
 var formidable = require("formidable");
 var fs = require("fs");
 var url = require("url");
+var cors = require('cors');
 var app = express();
 
 function fullUrl(req) {
@@ -14,6 +15,7 @@ function fullUrl(req) {
  return url2 + '/uploads/'
 }
 app.use('/', express.static(__dirname + '/'));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");

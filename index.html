@@ -6,7 +6,7 @@
   <body>
       <h1>Upload an image</h1>
       <form action="/imgUpload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="images[]" id="upload-input" multiple="multiple">
+        <input type="file" name="images[]" id="upload-input">
         <!-- <input type="submit" name="uploadimage" value="Upload Image"> -->
         <!-- <button type="button" id="upload">이미지 추가</button> -->
       </form>
@@ -52,6 +52,7 @@
       const url = URL.createObjectURL(blob);
       fileInfo.blob = blob;
       fileInfo.url = url;
+      // console.log(blob);
     });
   }
 
