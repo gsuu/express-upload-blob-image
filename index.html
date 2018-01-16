@@ -35,7 +35,6 @@
       tmpImg.onload = function(){
         getPreviewCanvas(tmpImg);
       };
-
     };
   }
 
@@ -48,17 +47,14 @@
 
   function editCanvas() {
     context.strokeRect(5,5,100,150);
+  }
+
+  function imageUpload() {
     canvas.toBlob(function(blob) {
       const url = URL.createObjectURL(blob);
       fileInfo.blob = blob;
       fileInfo.url = url;
-      // console.log(blob);
-    });
-  }
 
-  function imageUpload() {
-    let result;
-    canvas.toBlob(function(blob) {
       const formData = new FormData();
       formData.append('data', fileInfo.blob, fileInfo.fileName);
 
